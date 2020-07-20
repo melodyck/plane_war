@@ -2,7 +2,7 @@ package plane_war.shoot;
 
 import java.awt.image.BufferedImage;
 
-public class Bee extends FlyingObject implements Award{
+public class Bee extends FlyingObject implements Award {
     private int x_speed = 3;
     private int y_speed = 1;
     public int bonus;//定义奖励变量 为Bee的特殊变量
