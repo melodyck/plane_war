@@ -1,10 +1,8 @@
 package plane_war.shoot;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
-public class NormalEnemyPlane extends FlyingObject{
+public class NormalEnemyPlane extends FlyingObject {
     private int speed = 3;
     public int explosionImgIndex = 0;
     public BufferedImage[] explosionImg = new BufferedImage[]{Test.normalEnemyPlane_ember0, Test.normalEnemyPlane_ember1, Test.normalEnemyPlane_ember2, Test.normalEnemyPlane_ember3};

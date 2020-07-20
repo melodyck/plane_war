@@ -1,6 +1,5 @@
 package plane_war.shoot;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 //玩家飞机

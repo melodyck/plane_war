@@ -1,9 +1,8 @@
 package plane_war.shoot;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class IntensiveEnemyPlane extends FlyingObject{
+public class IntensiveEnemyPlane extends FlyingObject {
     private int speed = 2;
     public int explosionImgIndex = 0;
     public BufferedImage[] explosionImg = new BufferedImage[]{Test.intensiveEnemyPlane_ember0, Test.intensiveEnemyPlane_ember1, Test.intensiveEnemyPlane_ember2, Test.intensiveEnemyPlane_ember3};

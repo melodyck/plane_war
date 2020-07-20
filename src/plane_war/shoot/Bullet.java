@@ -1,9 +1,6 @@
 package plane_war.shoot;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-public class Bullet extends FlyingObject{
+public class Bullet extends FlyingObject {
     private int speed = 3;
     @Override
     public void move() {
