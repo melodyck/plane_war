@@ -17,6 +17,6 @@ public class Bullet extends FlyingObject {
     Bullet(){};
     //根据玩家机的x,y计算子弹的坐标
     public Bullet(int x, int y){
-        super(x, y, 1,Test.bulletImg);
+        super(x, y, 1,0, Test.bulletImg, null);
     }
 }

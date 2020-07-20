@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 
 public class IntensiveEnemyPlane extends FlyingObject {
     private int speed = 2;
-    public int explosionImgIndex = 0;
-    public BufferedImage[] explosionImg = new BufferedImage[]{Test.intensiveEnemyPlane_ember0, Test.intensiveEnemyPlane_ember1, Test.intensiveEnemyPlane_ember2, Test.intensiveEnemyPlane_ember3};
     @Override
     public void move() {
         int y;
@@ -20,7 +18,8 @@ public class IntensiveEnemyPlane extends FlyingObject {
 
 
     public IntensiveEnemyPlane(){
-       super((int)(Math.random() * (Test.WIDTH - Test.intensiveEnemyPlaneImg.getWidth())), -(Test.intensiveEnemyPlaneImg.getHeight()), 4, Test.intensiveEnemyPlaneImg);
+       super((int)(Math.random() * (Test.WIDTH - Test.intensiveEnemyPlaneImg.getWidth())), -(Test.intensiveEnemyPlaneImg.getHeight()), 4, 5, Test.intensiveEnemyPlaneImg,
+               new BufferedImage[]{Test.intensiveEnemyPlane_ember0, Test.intensiveEnemyPlane_ember1, Test.intensiveEnemyPlane_ember2, Test.intensiveEnemyPlane_ember3});
 //        super((int)(Math.random() * 400), 0, Test.intensiveEnemyPlaneImg);
     }
 }

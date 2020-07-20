@@ -301,58 +301,13 @@ public class Test extends JPanel {
             if (bullet.length == 1) {
                 for (int j = 0; j < flyingObjectArrayList.size(); j++) {
                     FlyingObject flyingObject = flyingObjectArrayList.get(j);
-                    if (bullet[0].getX() - flyingObject.getX() > -bullet[0].getWidth() && bullet[0].getX() - flyingObject.getX() < flyingObject.getWidth()
-                            && bullet[0].getY() - flyingObject.getY() < flyingObject.getHeight() && bullet[0].getY() - flyingObject.getY() > 0) {
-                        bullet[0].setBlood(0);
-                        flyingObject.decreaseBlood();
-                        playerPlane.increaseScore();
-                        if (flyingObject instanceof Bee) {
-                            //如果Bee奖励类型为1 玩家飞机加一点生命值
-                            if (((Bee) flyingObject).bonus == 1) {
-                                playerPlane.increaseBlood();
-                            }
-                            //如果Bee奖励类型为2 切换射击模式2
-                            else if (((Bee) flyingObject).bonus == 2) {
-                                shootingMode = 2;
-                            }
-                        }
-                    }
+                    hit(flyingObject, bullet[0]);
                 }
             } else if (bullet.length == 2) {
                 for (int j = 0; j < flyingObjectArrayList.size(); j++) {
                     FlyingObject flyingObject = flyingObjectArrayList.get(j);
-                    if (bullet[0].getX() - flyingObject.getX() > -bullet[0].getWidth() && bullet[0].getX() - flyingObject.getX() < flyingObject.getWidth()
-                            && bullet[0].getY() - flyingObject.getY() < flyingObject.getHeight() && bullet[0].getY() - flyingObject.getY() > 0) {
-                        bullet[0].setBlood(0);
-                        flyingObject.decreaseBlood();
-                        playerPlane.increaseScore();
-                        if (flyingObject instanceof Bee) {
-                            //如果Bee奖励类型为1 玩家飞机加一点生命值
-                            if (((Bee) flyingObject).bonus == 1) {
-                                playerPlane.increaseBlood();
-                            }
-                            //如果Bee奖励类型为2 切换射击模式2
-                            else if (((Bee) flyingObject).bonus == 2) {
-                                shootingMode = 2;
-                            }
-                        }
-                    }
-                    if (bullet[1].getX() - flyingObject.getX() > -bullet[1].getWidth() && bullet[1].getX() - flyingObject.getX() < flyingObject.getWidth()
-                            && bullet[1].getY() - flyingObject.getY() < flyingObject.getHeight() && bullet[1].getY() - flyingObject.getY() > 0) {
-                        bullet[1].setBlood(0);
-                        flyingObject.decreaseBlood();
-                        playerPlane.increaseScore();
-                        if (flyingObject instanceof Bee) {
-                            //如果Bee奖励类型为1 玩家飞机加一点生命值
-                            if (((Bee) flyingObject).bonus == 1) {
-                                playerPlane.increaseBlood();
-                            }
-                            //如果Bee奖励类型为2 切换射击模式2
-                            else if (((Bee) flyingObject).bonus == 2) {
-                                shootingMode = 2;
-                            }
-                        }
-                    }
+                    hit(flyingObject, bullet[0]);
+                    hit(flyingObject, bullet[1]);
                 }
             }
         }
@@ -386,7 +341,7 @@ public class Test extends JPanel {
                 i--;//列表成员删除后 前面的元素自动前移 所以下标要保持不变才不会漏掉后面的一个元素
             }
         }
-        //判断子弹是否打中
+        //移除子弹数组
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets.get(i).length == 1) {
                 if (bullets.get(i)[0].getBlood() == 0) {
@@ -402,45 +357,55 @@ public class Test extends JPanel {
 
         }
     }
+    //判断子弹和飞行物碰撞
+    public void hit(FlyingObject flyingObject, Bullet bullet){
+        if (bullet.getX() - flyingObject.getX() > -bullet.getWidth() && bullet.getX() - flyingObject.getX() < flyingObject.getWidth()
+                && bullet.getY() - flyingObject.getY() < flyingObject.getHeight() && bullet.getY() - flyingObject.getY() > 0) {
+            bullet.setBlood(0);
+            flyingObject.decreaseBlood();
+            playerPlane.increaseScore(flyingObject.getAwardScore());
+            if (flyingObject instanceof Award) {
+                ((Award) flyingObject).award(playerPlane);
+            }
+        }
+
+    }
 
     //实现飞行物爆炸效果
     private int explosionInterim = 0;//爆炸图片播放间歇
-
+    //代码优化
+    private void explosion(FlyingObject flyingObject, Graphics g){
+        g.drawImage(flyingObject.getExplosionImgList()[flyingObject.explosionImgIndex], flyingObject.getX(), flyingObject.getY(), this);
+        if(explosionInterim % 30 == 0){
+            flyingObject.explosionImgIndex++;
+        }
+    }
     //    private int mark = 0;
 //    private ArrayList<Integer> explosionImgIndex = new ArrayList<>();//播放图片下标
     private void FlyingObjectExplosion(Graphics g) {
         //普通敌机爆炸
         for (int i = 0; i < explosionNormalEnemyPlane.size(); i++) {
-            NormalEnemyPlane normalEnemyPlane = (NormalEnemyPlane) (explosionNormalEnemyPlane.get(i));
-            g.drawImage(normalEnemyPlane.explosionImg[normalEnemyPlane.explosionImgIndex], normalEnemyPlane.getX(), normalEnemyPlane.getY(), this);
-            if(explosionInterim % 20 == 0){
-                normalEnemyPlane.explosionImgIndex++;
-            }
-            if (normalEnemyPlane.explosionImgIndex >= 4) {
+            FlyingObject normalEnemyPlane = explosionNormalEnemyPlane.get(i);
+            explosion(normalEnemyPlane, g);
+            if (normalEnemyPlane.explosionImgIndex >= normalEnemyPlane.getExplosionImgList().length) {
                 explosionNormalEnemyPlane.remove(i);
                 i--;
             }
         }
         //强化敌机爆炸
       for (int i = 0; i < explosionIntensiveEnemyPlane.size(); i++) {
-            IntensiveEnemyPlane intensiveEnemyPlane = (IntensiveEnemyPlane) (explosionIntensiveEnemyPlane.get(i));
-            g.drawImage(intensiveEnemyPlane.explosionImg[intensiveEnemyPlane.explosionImgIndex], intensiveEnemyPlane.getX(), intensiveEnemyPlane.getY(), this);
-            if(explosionInterim % 30 == 0){
-                intensiveEnemyPlane.explosionImgIndex++;
-            }
-            if (intensiveEnemyPlane.explosionImgIndex >= 4) {
+          FlyingObject intensiveEnemyPlane = explosionIntensiveEnemyPlane.get(i);
+          explosion(intensiveEnemyPlane, g);
+            if (intensiveEnemyPlane.explosionImgIndex >= intensiveEnemyPlane.getExplosionImgList().length) {
                 explosionIntensiveEnemyPlane.remove(i);
                 i--;
             }
         }
        //蜜蜂消失
         for (int i = 0; i < deadBee.size(); i++) {
-            Bee bee = (Bee) (deadBee.get(i));
-            g.drawImage(bee.explosionImg[bee.explosionImgIndex], bee.getX(), bee.getY(), this);
-            if(explosionInterim % 30 == 0){
-                bee.explosionImgIndex++;
-            }
-            if (bee.explosionImgIndex >= 4) {
+            FlyingObject bee = deadBee.get(i);
+            explosion(bee, g);
+            if (bee.explosionImgIndex >= bee.getExplosionImgList().length) {
                 deadBee.remove(i);
                 i--;
             }

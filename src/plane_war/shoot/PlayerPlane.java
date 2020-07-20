@@ -11,9 +11,9 @@ public class PlayerPlane extends FlyingObject {
     public static int imgIndex = 0;
     private int modeTwoCount = 0;//模式二子弹数
     private BufferedImage[] liveImg = new BufferedImage[]{Test.playerPlane0Img, Test.playerPlane1Img};
-    private BufferedImage[] explosionImg = new BufferedImage[]{Test.playerPlane_ember0, Test.playerPlane_ember1, Test.playerPlane_ember2, Test.playerPlane_ember3};
     public PlayerPlane(){
-        super(150, 300, 10, Test.playerPlane0Img);
+        super(150, 300, 10, 0, Test.playerPlane0Img,
+                new BufferedImage[]{Test.playerPlane_ember0, Test.playerPlane_ember1, Test.playerPlane_ember2, Test.playerPlane_ember3});
     }
     @Override
     public void decreaseBlood(){
@@ -27,7 +27,7 @@ public class PlayerPlane extends FlyingObject {
             this.setImg(liveImg[(int)count % 2]);
         }
         else{
-            this.setImg(explosionImg[imgIndex]);
+            this.setImg(getExplosionImgList()[imgIndex]);
             if(countImg % 30 == 0){
                 imgIndex++;
             }
@@ -49,6 +49,7 @@ public class PlayerPlane extends FlyingObject {
             //设定mode2子弹数为20发
             if(++modeTwoCount == 20){
                 Test.shootingMode = 1;
+                modeTwoCount = 0;
             }
             Bullet[] bullets = new Bullet[type];
             bullets[0] = new Bullet(this.getX() + this.getWidth() / 2 - 24, this.getY() - 10);
@@ -63,9 +64,9 @@ public class PlayerPlane extends FlyingObject {
         setBlood(blood + 1);
     }
     //增加分数
-    public void increaseScore(){
+    public void increaseScore(int addScore){
         int score = getScore();
-        setScore(score + 1);
+        setScore(score + addScore);
     }
     private void gifSimulation(){
         //凭借多张图片的循环播放实现动态效果
